@@ -1,15 +1,13 @@
-#include "SanboxApplication.h"
-#include <stdio.h>
+#include <Hazel.h>
 
-TestApplication::TestApplication() {}
-TestApplication::~TestApplication() {}
-void TestApplication::Run(){
-	printf("Hello, Hazel!");
-	while (true) {
+class SandboxApplication : public Hazel::Application {
+public:
+	void Run() {
+		Hazel::Log::getClientLogger()->info("App Initialized");
+		while (true);
 	}
-}
+};
 
-Hazel::Application* GetApplication() {
-	Hazel::Application *application = new TestApplication();
-	return application;
+Hazel::Application* CreateApplication() {
+	return new SandboxApplication;
 }

@@ -2,13 +2,11 @@
 #include "Core.h"
 
 namespace Hazel {
-	class HZ_API Application
-	{
+	class HAZEL_API Application{
 	public:
 		Application();
 		virtual ~Application();
 		virtual void Run();
-	private:
-
 	};
+	Application* CreateApplication();
 }
