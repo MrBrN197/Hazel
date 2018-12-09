@@ -8,10 +8,15 @@ workspace "Hazel"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+includeDir = {}
+includeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+
+include "Hazel/vendor/GLFW"
+
 project "Hazel"
-	location "Hazel"
-	kind "SharedLib"
-	language "C++"
+	location "Hazel"	
+	kind "sharedLib"
+	language "c++"
 
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -21,83 +26,80 @@ project "Hazel"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
 	}
+
 	includedirs{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{includeDir.GLFW}"
 	}
-	defines{
-		"HZ_BUILD_DLL"
+	links{
+		"GLFW",
+		"opengl32.lib"
 	}
 
-	filter("system:windows")
-		cppdialect "C++14"
+	pchheader "hzpch.h"
+	pchsource "Hazel/src/hzpch.cpp"
+
+
+	defines "HZ_BUILD_DLL"
+	
+	
+	filter "system:windows"
+		cppdialect "c++14"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines{
-			"HZ_PLATFORM_WINDOWS"
-		}
+		defines "HZ_PLATFORM_WINDOWS"
 
 		postbuildcommands{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} ../bin/".. outputdir .. "/Sandbox")
 		}
-		
-
+	
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
 		symbols "On"
-
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		optimize "On"
-
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		optimize "On"
 
+		
 project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-
+	location "Sandbox"	
+	kind "consoleApp"
+	language "c++"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	files{
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/src/**.h"
+	}
+
+	includedirs{
+		"Hazel/vendor/spdlog/include",
+		"Hazel/src/"
+	}
 	links{
 		"Hazel"
 	}
-
-	files{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
-	}
-	includedirs{
-		"Hazel/vendor/spdlog/include",
-		"Hazel/src"
-	}
-
-	filter("system:windows")
-		cppdialect "C++14"
+	
+	filter "system:windows"
+		cppdialect "c++14"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines{
-			"HZ_PLATFORM_WINDOWS"
-		}
+		defines "HZ_PLATFORM_WINDOWS"
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
 		symbols "On"
-
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		optimize "On"
-		
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		optimize "On"
-
-
-
-
