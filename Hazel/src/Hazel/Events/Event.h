@@ -5,7 +5,6 @@
 
 namespace Hazel {
 	
-
 	enum class EventType {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
@@ -31,6 +30,7 @@ namespace Hazel {
 	#define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const {return category; }
 
 
+
 	class HAZEL_API Event {
 		friend class EventDispatcher;
 	public:
@@ -49,5 +49,27 @@ namespace Hazel {
 	inline std::ostream& operator<<(std::ostream& os, const Event& event) {
 		return os << event.ToString();
 	}
+
+
+	class EventDispatcher {
+
+	public:
+		EventDispatcher(Event& event) : m_Event(event){}
+
+		template <typename T>
+		using EventFn = std::function<bool(T&)>;
+
+
+		template <typename T>
+		void Dispatch(EventFn<T&> func) {
+			if (T::GetStaticType() == m_Event.GetEventType()) {
+				func(*(T*)&m_Event);
+			}
+		}
+
+	private:
+		Event& m_Event;
+	};
+
 
 }

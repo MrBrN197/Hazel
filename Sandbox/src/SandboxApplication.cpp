@@ -1,10 +1,10 @@
 #include <Hazel.h>
 
-class SandboxApplication : public Hazel::Application {
-public:
+class SandboxApplication : public Hazel::Application {};
 
-};
 
 Hazel::Application* CreateApplication() {
-	return new SandboxApplication;
+
+	return new Hazel::Application;
+
 }

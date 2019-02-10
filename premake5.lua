@@ -10,14 +10,19 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 includeDir = {}
 includeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+includeDir["Glad"] = "Hazel/vendor/Glad/include"
 
 include "Hazel/vendor/GLFW"
+include "Hazel/vendor/Glad"
 
 project "Hazel"
 	location "Hazel"	
 	kind "sharedLib"
 	language "c++"
+	staticruntime "off"
 
+	pchheader "hzpch.h"
+	pchsource "Hazel/src/hzpch.cpp"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -30,26 +35,26 @@ project "Hazel"
 	includedirs{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{includeDir.GLFW}"
+		"%{includeDir.GLFW}",
+		"%{includeDir.Glad}",
 	}
+
 	links{
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
 	}
 
-	pchheader "hzpch.h"
-	pchsource "Hazel/src/hzpch.cpp"
-
-
 	defines "HZ_BUILD_DLL"
-	
 	
 	filter "system:windows"
 		cppdialect "c++14"
-		staticruntime "On"
 		systemversion "latest"
 
-		defines "HZ_PLATFORM_WINDOWS"
+		defines {
+			"HZ_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
+		}
 
 		postbuildcommands{
 			("{COPY} %{cfg.buildtarget.relpath} ../bin/".. outputdir .. "/Sandbox")
@@ -57,12 +62,15 @@ project "Hazel"
 	
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
+		runtime "Debug"
 		symbols "On"
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
+		runtime "Release"
 		optimize "On"
 	filter "configurations:Dist"
 		defines "HZ_DIST"
+		runtime "Release"
 		optimize "On"
 
 		
@@ -70,6 +78,7 @@ project "Sandbox"
 	location "Sandbox"	
 	kind "consoleApp"
 	language "c++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -89,17 +98,19 @@ project "Sandbox"
 	
 	filter "system:windows"
 		cppdialect "c++14"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines "HZ_PLATFORM_WINDOWS"
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
+		runtime "Debug"
 		symbols "On"
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
+		runtime "Release"
 		optimize "On"
 	filter "configurations:Dist"
 		defines "HZ_DIST"
+		runtime "Release"
 		optimize "On"

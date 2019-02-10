@@ -19,25 +19,30 @@ namespace Hazel {
 	};
 
 	class HAZEL_API WindowCloseEvent : public Event {
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-		EVENT_CLASS_TYPE(WindowResize)
-	};
-	
-	class HAZEL_API WindowMovedEvent : public Event{
+	public:
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 		EVENT_CLASS_TYPE(WindowClose)
 	};
 	
+	class HAZEL_API WindowMovedEvent : public Event{
+	public:
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_TYPE(WindowMoved)
+	};
+	
 	class HAZEL_API WindowTickEvent : public Event {
+	public:
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 		EVENT_CLASS_TYPE(AppTick)
 	};
 	class HAZEL_API WindowUpdateEvent : public Event {
+	public:
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 		EVENT_CLASS_TYPE(AppUpdate)
 	};
 	
 	class HAZEL_API WindowRenderEvent : public Event {
+	public:
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 		EVENT_CLASS_TYPE(AppRender)
 	};
