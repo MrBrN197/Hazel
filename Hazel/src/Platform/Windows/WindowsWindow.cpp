@@ -30,12 +30,10 @@ namespace Hazel {
 		m_Window = glfwCreateWindow(props.Width, props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
 		
-
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		HZ_CORE_ASSERT(status, "Failed to initialize glad");
 
 		glfwSetWindowUserPointer(m_Window, &this->m_Data);
-
 		//GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
 			WindowResizeEvent event((float)width, (float)height);
@@ -52,21 +50,21 @@ namespace Hazel {
 
 			switch (action)
 			{
-				case GLFW_PRESS: {
-					KeyPressedEvent event(scancode, 0);
-					data.EventCallback(event);
-					break;
-				}
-				case GLFW_REPEAT: {
-					KeyPressedEvent event(scancode, 1);
-					data.EventCallback(event);
-					break;
-				}
-				case GLFW_RELEASE: {
-					KeyReleasedEvent event(scancode);
-					data.EventCallback(event);
-					break;
-				}
+			case GLFW_PRESS: {
+				KeyPressedEvent event(scancode, 0);
+				data.EventCallback(event);
+				break;
+			}
+			case GLFW_REPEAT: {
+				KeyPressedEvent event(scancode, 1);
+				data.EventCallback(event);
+				break;
+			}
+			case GLFW_RELEASE: {
+				KeyReleasedEvent event(scancode);
+				data.EventCallback(event);
+				break;
+			}
 			}
 		});
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
@@ -75,16 +73,16 @@ namespace Hazel {
 
 			switch (action)
 			{
-				case GLFW_PRESS: {
-					MousePressedEvent event(button);
-					data.EventCallback(event);
-					break;
-				}
-				case GLFW_RELEASE: {
-					MouseReleasedEvent event(button);
-					data.EventCallback(event);
-					break;
-				}
+			case GLFW_PRESS: {
+				MousePressedEvent event(button);
+				data.EventCallback(event);
+				break;
+			}
+			case GLFW_RELEASE: {
+				MouseReleasedEvent event(button);
+				data.EventCallback(event);
+				break;
+			}
 			}
 		});
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
@@ -104,6 +102,7 @@ namespace Hazel {
 			data.EventCallback(event);
 
 		});
+
 	}
 	void WindowsWindow::Shutdown() {
 		glfwDestroyWindow(m_Window);

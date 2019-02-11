@@ -3,11 +3,10 @@
 #include "Hazel\Events\Event.h"
 
 namespace Hazel {
-	class Layer {
+	class HAZEL_API Layer {
 	public:
 		Layer(const std::string& name = "Layer");
 		virtual ~Layer();
-
 
 		virtual void OnUpdate() {}
 		virtual void OnDetach() {}
