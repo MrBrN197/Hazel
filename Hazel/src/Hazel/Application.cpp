@@ -5,7 +5,7 @@
 
 namespace Hazel {
 
-	#define BIND(x) (std::bind(&Application::x, this, std::placeholders::_1))
+	#define BIND_EVENT_FN(x) (std::bind(&Application::x, this, std::placeholders::_1))
 
 	Application* Application::s_Instance = nullptr;
 
@@ -13,7 +13,7 @@ namespace Hazel {
 	{
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetCallbackFunc(BIND(OnEvent));
+		m_Window->SetCallbackFunc(BIND_EVENT_FN(OnEvent));
 	}
 
 	void Application::PushLayer(Layer* layer) {
@@ -31,17 +31,17 @@ namespace Hazel {
 		m_LayerStack.PopOverlay(layer);
 	}
 
-
 	bool Application::OnWindowClose(WindowCloseEvent& event) {
 		m_Running = false;
 		return true;
 	}
 
 	void Application::OnEvent(Event& e) {
+		
 		HZ_CORE_INFO("{0}", e);
 
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND(OnWindowClose));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 			(*--it)->OnEvent(e);

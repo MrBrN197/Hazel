@@ -19,8 +19,6 @@ namespace Hazel {
 		m_Data.Width = props.Width;
 		m_Data.Vsync = props.Vsync;
 
-		HZ_CORE_ASSERT("Creating Window {0} ({1}, {2})", props.Title, props.Width, props.Width);
-
 		if (!s_GlfwInitialized) {
 			int success = glfwInit();
 			HZ_CORE_ASSERT(success, "Failed To Initialize GLFW");
@@ -101,6 +99,11 @@ namespace Hazel {
 			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.EventCallback(event);
 
+		});
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent event(keycode);
+			data.EventCallback(event);
 		});
 
 	}

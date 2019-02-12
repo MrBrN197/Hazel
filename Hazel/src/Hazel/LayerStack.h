@@ -9,9 +9,6 @@ namespace Hazel {
 		LayerStack();
 		~LayerStack();
 
-		void OnUpdate();
-		void OnRender();
-
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 		void PopLayer(Layer* layer);
