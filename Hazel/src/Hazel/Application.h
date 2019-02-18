@@ -18,7 +18,7 @@ namespace Hazel {
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* layer);
 
-		inline Window& getWindow() { return *m_Window; }
+		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& event);

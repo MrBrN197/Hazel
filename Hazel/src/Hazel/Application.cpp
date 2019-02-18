@@ -37,8 +37,6 @@ namespace Hazel {
 	}
 
 	void Application::OnEvent(Event& e) {
-		
-		HZ_CORE_INFO("{0}", e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
@@ -58,12 +56,12 @@ namespace Hazel {
 
 		while (m_Running) {
 
+			glClearColor(0.25f, 0.65f, 0.35f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
 			}
-
-			glClearColor(0.25f, 0.65f, 0.35f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			m_Window->OnUpdate();
 		}

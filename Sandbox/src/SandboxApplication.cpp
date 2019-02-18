@@ -1,17 +1,15 @@
 #include <Hazel.h>
 
-class SandboxApplication : public Hazel::Application {
+class Sandbox : public Hazel::Application {
 public:
-	SandboxApplication() {
+	Sandbox() {
 		PushLayer(new Hazel::ImGuiLayer());
 	}
 
-	~SandboxApplication(){}
+	~Sandbox(){}
 };
 
 
-Hazel::Application* CreateApplication() {
-
-	return new SandboxApplication;
-
+Hazel::Application* Hazel::CreateApplication() {
+	return new Sandbox();
 }

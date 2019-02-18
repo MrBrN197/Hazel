@@ -21,6 +21,8 @@ namespace Hazel {
 		inline bool IsVsync() const override { return m_Data.Vsync; }
 		inline void SetCallbackFunc(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 
+		virtual void* GetNativeWindow() override;
+
 	private:
 		GLFWwindow* m_Window;
 	public:

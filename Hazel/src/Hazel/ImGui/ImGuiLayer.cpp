@@ -4,26 +4,27 @@
 #include <imgui.h>
 #include "Platform\OpenGL\ImGuiOpenGLRenderer.h"
 #include <GLFW\glfw3.h>
+#include <glad\glad.h>
 #include <Hazel\Application.h>
 
 namespace Hazel {
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
 
 	void ImGuiLayer::OnUpdate() {
-		
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
-		io.DisplaySize = ImVec2(app.getWindow().GetWidth(), app.getWindow().GetHeight());
+		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
-		float time = (float)ImGui::GetTime();
-		io.DeltaTime = m_Time > 0.0 ? (time - m_Time) : (1/60.0f);
+		float time = (float)glfwGetTime();
+		io.DeltaTime = m_Time > 0.0 ? (time - m_Time) : (1.0f / 60.0f);
 		m_Time = time;
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
-
+		
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
+
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
@@ -120,7 +121,6 @@ namespace Hazel {
 
 		return false;
 	}
-
 	bool ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& e) {
 	
 		ImGuiIO& io = ImGui::GetIO();
@@ -135,6 +135,7 @@ namespace Hazel {
 		io.DisplaySize = ImVec2(e.GetWidth(), e.GetHeight());
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 		return false;
+		
 	}
 
 }

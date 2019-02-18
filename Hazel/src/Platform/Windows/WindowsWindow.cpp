@@ -131,5 +131,9 @@ namespace Hazel {
 		}
 		m_Data.Vsync = enabled;
 	}
+
+	void* WindowsWindow::GetNativeWindow() {
+		return m_Window;
+	}
 	
 }
