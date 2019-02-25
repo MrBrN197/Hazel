@@ -13,6 +13,13 @@ namespace Hazel {
 		return new WindowsWindow(props);
 	}
 
+	WindowsWindow::~WindowsWindow() {
+		Shutdown();
+	}
+	WindowsWindow::WindowsWindow(WindowProps& props) {
+		Init(props);
+	}
+
 	void WindowsWindow::Init(WindowProps& props) {
 		m_Data.Title = props.Title;
 		m_Data.Height = props.Height;
@@ -110,16 +117,10 @@ namespace Hazel {
 	void WindowsWindow::Shutdown() {
 		glfwDestroyWindow(m_Window);
 	}
-	WindowsWindow::WindowsWindow(WindowProps& props) {
-		Init(props);
-	}
-	WindowsWindow::~WindowsWindow() {
-		Shutdown();
-	}
 
 	void WindowsWindow::OnUpdate(){
-		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
+		glfwSwapBuffers(m_Window);
 	}
 
 	void WindowsWindow::SetVsync(bool enabled) {

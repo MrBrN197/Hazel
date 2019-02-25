@@ -1,12 +1,15 @@
 #include <Hazel.h>
+#include <imgui\imgui.h>
 
 class Sandbox : public Hazel::Application {
 public:
-	Sandbox() {
-		PushLayer(new Hazel::ImGuiLayer());
+	Sandbox() : Hazel::Application() {
 	}
 
 	~Sandbox(){}
+
+
+
 };
 
 
