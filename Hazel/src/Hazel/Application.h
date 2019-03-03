@@ -12,7 +12,7 @@ namespace Hazel {
 		Application();
 		virtual ~Application();
 		void OnEvent(Event& e);
-		virtual void Run();
+		void Run();
 		
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
