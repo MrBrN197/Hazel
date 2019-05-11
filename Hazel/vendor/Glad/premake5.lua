@@ -2,6 +2,7 @@
 project "Glad"
     kind "StaticLib"
     language "C"
+    staticruntime "on"
 
     targetdir("bin/" .. outputdir .. "/%{prj.name}")
     objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -16,9 +17,13 @@ project "Glad"
 	}
 
     filter "system:windows"
-        buildoptions {"-std=c11", "-lgdi32"}
-        staticruntime "On"
         systemversion "latest"
 
-    filter {"system:windows", "configurations:release"}
-        buildoptions "/MT"
+    filter "configurations:Debug"
+		defines "HZ_DEBUG"
+		runtime "Debug"
+		symbols "on"
+	filter "configurations:Release"
+		defines "HZ_RELEASE"
+		runtime "Release"
+		optimize "on"

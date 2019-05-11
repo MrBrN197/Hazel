@@ -1,14 +1,13 @@
 #include <Hazel.h>
 #include <imgui\imgui.h>
 
+
 class Sandbox : public Hazel::Application {
 public:
 	Sandbox() : Hazel::Application() {
 	}
 
 	~Sandbox(){}
-
-
 
 };
 
