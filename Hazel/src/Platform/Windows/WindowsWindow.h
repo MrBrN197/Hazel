@@ -2,6 +2,9 @@
 #include "Hazel\Window.h"
 #include <GLFW\glfw3.h>
 
+#include "Hazel\Renderer\GraphicsContext.h"
+
+
 namespace Hazel {
 
 	class HAZEL_API WindowsWindow : public Window {
@@ -25,7 +28,8 @@ namespace Hazel {
 
 	private:
 		GLFWwindow* m_Window;
-	public:
+		GraphicsContext *m_Context;
+
 		struct WindowData {
 			unsigned int Width, Height;
 			std::string Title;

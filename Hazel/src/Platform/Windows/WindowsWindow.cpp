@@ -5,9 +5,15 @@
 #include "Hazel\Events\KeyEvent.h"
 #include <glad\glad.h>
 
+#include "../OpenGL/OpenGLContext.h"
+
 namespace Hazel {
 
 	static bool s_GlfwInitialized = false;
+
+	static void GLFWErrorCallback(int error, const char* description) {
+		HZ_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+	}
 
 	Window* Window::Create(WindowProps& props){
 		return new WindowsWindow(props);
@@ -29,16 +35,17 @@ namespace Hazel {
 		if (!s_GlfwInitialized) {
 			int success = glfwInit();
 			HZ_CORE_ASSERT(success, "Failed To Initialize GLFW");
+			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GlfwInitialized = true;
 		}
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		HZ_CORE_ASSERT(status, "Failed to initialize glad");
+
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &this->m_Data);
+		SetVsync(true);
 		//GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
 			WindowResizeEvent event((float)width, (float)height);
@@ -120,7 +127,7 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate(){
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVsync(bool enabled) {
