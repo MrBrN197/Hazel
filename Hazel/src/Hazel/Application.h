@@ -29,6 +29,9 @@ namespace Hazel {
 	private:
 		static Application* s_Instance;
 		LayerStack m_LayerStack;
+		unsigned int m_VBO;
+		unsigned int m_IBO;
+		unsigned int m_VAO;
 	};
 
 	Application* CreateApplication();
