@@ -1,7 +1,6 @@
 #include "hzpch.h"
 #include "Shader.h"
 
-#include <string>
 #include <glad\glad.h>
 
 namespace Hazel {

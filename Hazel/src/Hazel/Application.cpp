@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Platform\Windows\WindowsWindow.h"
 #include <glad\glad.h>
+#include "Hazel\Renderer\Buffer.h"
 
 namespace Hazel {
 
@@ -16,27 +17,22 @@ namespace Hazel {
 		PushOverlay(m_ImGuiLayer);
 		m_Window->SetCallbackFunc(BIND_EVENT_FN(OnEvent));
 
-		float vertices[9] = {
-			-0.5f, -0.5f, 0.f,
-			 0.5f, -0.5f, 0.f,
-			-0.0f, +0.5f, 0.f
-		};
-		unsigned short indices[3] = { 0,1,2 };
-
-		glGenBuffers(1, &m_VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &m_IBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-
 		glGenVertexArrays(1, &m_VAO);
 		glBindVertexArray(m_VAO);
 
+		float vertices[9] = {
+			-0.5f, -0.5f, 0.f,
+			 0.5f, -0.5f, 0.f,
+			 0.f, 0.5f, 0.f
+		};
+		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		uint32_t indices[3] = { 0,1,2 };
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
+
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GL_FLOAT) * 3, (const void*)0);
+
 
 		std::string vertexSrc = R"(
 #version 330 core
@@ -45,7 +41,7 @@ layout (location = 0) in vec3 a_Position;
 out vec3 v_Position;
 
 void main(){
-    gl_Position = vec4(a_Position,1.0);
+    gl_Position = vec4(a_Position, 1.0);
     v_Position = a_Position;
 }
 )";
@@ -104,10 +100,10 @@ void main(){
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-			m_Shader->Bind();
 			glBindVertexArray(m_VAO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+			m_Shader->Bind();
+			m_VertexBuffer->Bind();
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, 0);
 
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
