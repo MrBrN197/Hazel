@@ -8,11 +8,16 @@ namespace Hazel {
 		virtual ~OpenGLVertexBuffer();
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
 
-		virtual void SetData();
-
 		virtual void Bind() const;
 		virtual void Unbind() const;
+
+		virtual const BufferLayout& GetLayout() const { return m_Layout; }
+		virtual void SetLayout(BufferLayout layout) {
+			m_Layout = layout;
+		}
+
 	private:
+		BufferLayout m_Layout;
 		uint32_t m_RendererID;
 	};
 
@@ -20,8 +25,6 @@ namespace Hazel {
 	public:
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
 		virtual ~OpenGLIndexBuffer();
-
-		virtual void SetData();
 
 		virtual void Bind() const;
 		virtual void Unbind() const;
