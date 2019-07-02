@@ -2,11 +2,12 @@
 #include "hzpch.h"
 #include "Core.h"
 #include "Window.h"
-#include "Events\ApplicationEvent.h"
-#include <Hazel\LayerStack.h>
-#include "Hazel\ImGui\ImGuiLayer.h"
-#include "Hazel\Renderer\Shader.h"
-#include "Hazel\Renderer\Buffer.h"
+#include "Events/ApplicationEvent.h"
+#include <Hazel/LayerStack.h>
+#include "Hazel/ImGui/ImGuiLayer.h"
+#include "Hazel/Renderer/Shader.h"
+#include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/VertexArray.h"
 
 namespace Hazel {
 	class HAZEL_API Application{
@@ -31,9 +32,7 @@ namespace Hazel {
 	private:
 		static Application* s_Instance;
 		LayerStack m_LayerStack;
-		unsigned int m_VAO;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<VertexArray> m_VertexArray;
 		std::unique_ptr<Shader> m_Shader;
 	};
 

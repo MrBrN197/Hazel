@@ -10,25 +10,6 @@ namespace Hazel {
 
 	Application* Application::s_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
-		switch (type)
-		{
-			case ShaderDataType::Float:	 return GL_FLOAT;
-			case ShaderDataType::Float2: return GL_FLOAT;
-			case ShaderDataType::Float3: return GL_FLOAT;
-			case ShaderDataType::Float4: return GL_FLOAT;
-			case ShaderDataType::Mat3:	 return GL_FLOAT;
-			case ShaderDataType::Mat4:	 return GL_FLOAT;
-			case ShaderDataType::Int:	 return GL_INT;
-			case ShaderDataType::Int2:	 return GL_INT;
-			case ShaderDataType::Int3:	 return GL_INT;
-			case ShaderDataType::Int4:	 return GL_INT;
-			case ShaderDataType::Bool:	 return GL_BOOL;
-		}
-		HZ_CORE_ASSERT(false, "Unknown ShaderDataType");
-		return GL_NONE;
-	}
-
 	Application::Application(){
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -36,37 +17,26 @@ namespace Hazel {
 		PushOverlay(m_ImGuiLayer);
 		m_Window->SetCallbackFunc(BIND_EVENT_FN(OnEvent));
 
-		glGenVertexArrays(1, &m_VAO);
-		glBindVertexArray(m_VAO);
 
 		float vertices[7 * 3] = {
 			-0.5f, -0.5f, 0.f, 0.2f, 0.6f, 0.9f, 1.0f,
 			 0.5f, -0.5f, 0.f, 0.8f, 0.7f, 0.2f, 1.0f,
 			 0.f,   0.5f, 0.f, 0.2f, 0.8f, 0.2f, 1.0f
 		};
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		m_VertexArray.reset(VertexArray::Create());
+		std::shared_ptr<VertexBuffer> vertexBuffer(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		uint32_t indices[3] = { 0,1,2 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
-
+		std::shared_ptr<IndexBuffer> indexBuffer(IndexBuffer::Create(indices, 3));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		BufferLayout layout({
 			{ShaderDataType::Float3, "a_Position"},
 			{ShaderDataType::Float4, "a_Color"}
 			});
-		m_VertexBuffer->SetLayout(layout);
-		uint32_t index = 0;
-		for (auto element : layout) {
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(
-				index,
-				BufferElement::GetComponentCount(element.Type),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				(element.Normalized) ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.Offset);
-			index++;
-		}
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 
 		std::string vertexSrc = R"(
@@ -128,7 +98,6 @@ void main(){
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 			(*--it)->OnEvent(e);
 		}
-
 	}
 
 	void Application::Run() {
@@ -138,11 +107,9 @@ void main(){
 			glClearColor(0.25f, 0.65f, 0.35f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-			glBindVertexArray(m_VAO);
+			m_VertexArray->Bind();
 			m_Shader->Bind();
-			m_VertexBuffer->Bind();
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, 0);
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
 
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();

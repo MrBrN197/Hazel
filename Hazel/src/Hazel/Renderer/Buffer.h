@@ -71,6 +71,7 @@ namespace Hazel {
 		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
 
 		uint32_t GetStride() const { return m_Stride; }
+		const std::vector<BufferElement>& GetElements() const { return m_Elements; }
 	private:
 		void CalculateOffsetsAndStride() {
 			
