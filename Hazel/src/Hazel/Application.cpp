@@ -1,8 +1,9 @@
 #include "hzpch.h"
 #include "Application.h"
-#include "Platform\Windows\WindowsWindow.h"
-#include <glad\glad.h>
-#include "Hazel\Renderer\Buffer.h"
+#include "Platform/Windows/WindowsWindow.h"
+#include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/RenderCommand.h"
+#include "Hazel/Renderer/Renderer.h"
 
 namespace Hazel {
 
@@ -104,12 +105,15 @@ void main(){
 
 		while (m_Running) {
 
-			glClearColor(0.25f, 0.65f, 0.35f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			RenderCommand::Clear();
+			RenderCommand::ClearColor({ 0.25f, 0.65f, 0.35f, 1.0f });
 
-			m_VertexArray->Bind();
+			Renderer::BeginScene();
+
 			m_Shader->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
+			Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
