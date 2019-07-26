@@ -13,7 +13,8 @@ public:
 			1.f,
 			6.f),
 		m_CameraPosition(0.f),
-		Hazel::Layer() {
+		Hazel::Layer(), 
+		m_PrismPosition({0.f, 0.f, -2.f}) {
 
 		float vertices[7 * 5] = {
 			-0.5f, -0.5f,  0.5f, 0.2f, 0.6f, 0.9f, 1.0f,
@@ -48,12 +49,13 @@ public:
 layout (location = 0) in vec3 a_Position;
 layout (location = 1) in vec4 a_Color;
 
-uniform mat4 a_ViewProjeciton;
+uniform mat4 u_ViewProjeciton;
+uniform mat4 u_Transform;
 
 out vec4 v_Color;
 
 void main(){
-    gl_Position = a_ViewProjeciton * vec4(a_Position, 1);
+    gl_Position = u_ViewProjeciton * u_Transform * vec4(a_Position, 1);
 	v_Color = a_Color;
 }
 )";
@@ -73,11 +75,57 @@ void main(){
 	virtual ~ExampleLayer(){}
 
 	virtual void OnUpdate() override {
+
+
+		m_PrismRotation += 1.f;
+
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT)) {
+			m_CameraPosition.x -= m_CameraMoveSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT)) {
+			m_CameraPosition.x += m_CameraMoveSpeed;
+		}
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN)) {
+			m_CameraPosition.z += m_CameraMoveSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_UP)) {
+			m_CameraPosition.z -= m_CameraMoveSpeed;
+		}
+
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_J)) {
+			m_PrismPosition.x -= m_ObjectSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_L)) {
+			m_PrismPosition.x += m_ObjectSpeed;
+		}
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_I)) {
+			m_PrismPosition.z -= m_ObjectSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_K)) {
+			m_PrismPosition.z += m_ObjectSpeed;
+		}
+
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_A)) {
+			m_CameraRotation -= m_CameraRotationSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_D)) {
+			m_CameraRotation += m_CameraRotationSpeed;
+		}
+
+
+		Hazel::RenderCommand::EnableDepthTesting();
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
 		Hazel::Renderer::BeginScene(m_Camera);
+		
+		Hazel::RenderCommand::ClearColor({0.25f, 0.65f, 0.35f, 1.f});
+		Hazel::RenderCommand::Clear();
 
-		Hazel::Renderer::Submit(m_Shader, m_VertexArray);
+		glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
+		Hazel::Renderer::Submit(m_Shader, m_VertexArray, transform);
+		
 		Hazel::Renderer::EndScene();
-
 	}
 	virtual void OnDetach() override {
 	}
@@ -89,22 +137,8 @@ void main(){
 	}
 
 	bool OnKeyPressedEvent(Hazel::KeyPressedEvent& event) {
-
-		if (event.GetKeyCode() == HZ_KEY_LEFT) {
-			m_CameraPosition.x += m_CameraMoveSpeed;
-		}
-		else if (event.GetKeyCode() == HZ_KEY_RIGHT) {
-			m_CameraPosition.x -= m_CameraMoveSpeed;
-		}
-		if (event.GetKeyCode() == HZ_KEY_UP) {
-			m_CameraPosition.y += m_CameraMoveSpeed;
-		}
-		else if (event.GetKeyCode() == HZ_KEY_DOWN) {
-			m_CameraPosition.y -= m_CameraMoveSpeed;
-		}
 		return false;
 	}
-
 
 private:
 	Hazel::PerspectiveCamera m_Camera;
@@ -112,10 +146,15 @@ private:
 	std::shared_ptr<Hazel::Shader> m_Shader;
 
 	glm::vec3 m_CameraPosition;
-	float m_CameraRotation;
+	float m_CameraRotation = 0.f;
 
 	float m_CameraMoveSpeed = 0.1f;
 	float m_CameraRotationSpeed = 2.f;
+
+	glm::vec3 m_PrismPosition;
+	float m_ObjectSpeed = 0.1f;
+	float m_PrismRotation = 0.f;
+
 };
 
 

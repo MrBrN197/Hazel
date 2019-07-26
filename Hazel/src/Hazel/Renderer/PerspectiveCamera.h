@@ -25,12 +25,11 @@ namespace Hazel {
 		}
 
 		const glm::mat4 GetViewProjection() const {
-			glm::mat4 temporaryMatrix = glm::translate(glm::vec3(0.f, 0.f, -5.f));
-			return m_ProjectionMatrix * temporaryMatrix;
+			return m_ProjectionMatrix * m_ViewMatrix;
 		}
 		void RecalculateViewMatrix() {
 			glm::mat4 translate = glm::translate(m_Translation);
-			glm::mat4 rotate = glm::rotate(m_Rotation, glm::vec3(0.f, 1.f, 0.f));
+			glm::mat4 rotate = glm::rotate(glm::radians(m_Rotation), glm::vec3(0.f, 1.f, 0.f));
 			m_ViewMatrix = glm::inverse(translate * rotate);
 		}
 	private:

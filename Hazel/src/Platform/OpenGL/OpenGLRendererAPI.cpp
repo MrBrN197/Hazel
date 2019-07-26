@@ -14,5 +14,11 @@ namespace Hazel {
 	void OpenGLRendererAPI::ClearColor(const glm::vec4& color) {
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
+	void OpenGLRendererAPI::EnableDepthTesting() {
+		glEnable(GL_DEPTH_TEST);
+	}
+	void OpenGLRendererAPI::DisableDepthTesting() {
+		glDisable(GL_DEPTH_TEST);
+	}
 
 }

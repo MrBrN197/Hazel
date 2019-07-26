@@ -6,7 +6,6 @@
 #include "Hazel/Renderer/Renderer.h"
 #include "Hazel/Renderer/PerspectiveCamera.h"
 #include "Hazel/Input.h"
-#include <glad/glad.h>
 
 namespace Hazel {
 
@@ -57,8 +56,6 @@ namespace Hazel {
 	}
 
 	void Application::Run() {
-
-		glEnable(GL_DEPTH_TEST);
 
 		while (m_Running) {
 

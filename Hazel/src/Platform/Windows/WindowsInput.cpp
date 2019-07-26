@@ -18,7 +18,7 @@ namespace Hazel {
 	bool WindowsInput::IsKeyPressedImpl(int keycode) {
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
 		int state = glfwGetKey(window, keycode);
-		return state == GLFW_PRESS || GLFW_REPEAT;
+		return state == GLFW_PRESS  || state == GLFW_REPEAT;
 	}
 
 

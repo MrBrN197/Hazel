@@ -13,6 +13,8 @@ namespace Hazel {
 		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) = 0;
 		virtual void Clear() = 0;
 		virtual void ClearColor(const glm::vec4& color) = 0;
+		virtual void EnableDepthTesting() = 0;
+		virtual void DisableDepthTesting() = 0;
 
 		static inline API GetAPI() { return s_API; }
 	private:
