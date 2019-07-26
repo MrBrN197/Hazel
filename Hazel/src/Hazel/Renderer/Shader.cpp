@@ -2,6 +2,7 @@
 #include "Shader.h"
 
 #include <glad\glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Hazel {
 
@@ -126,5 +127,17 @@ namespace Hazel {
 	void Shader::Bind() const{
 		glUseProgram(m_RendererID);
 	}
+
+	uint32_t Shader::GetUniformLocation(const char* name) {
+		int value = glGetUniformLocation(m_RendererID, name);
+
+		HZ_ASSERT(value >= 0, "Uniform location not found");
+
+		return value;
+	}
+	void Shader::SetUniformMat4(const char* name, const glm::mat4& values) {
+		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(values));
+	}
+
 
 }

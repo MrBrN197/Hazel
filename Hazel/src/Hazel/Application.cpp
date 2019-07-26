@@ -4,6 +4,9 @@
 #include "Hazel/Renderer/Buffer.h"
 #include "Hazel/Renderer/RenderCommand.h"
 #include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/PerspectiveCamera.h"
+#include "Hazel/Input.h"
+#include <glad/glad.h>
 
 namespace Hazel {
 
@@ -17,54 +20,6 @@ namespace Hazel {
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
 		m_Window->SetCallbackFunc(BIND_EVENT_FN(OnEvent));
-
-
-		float vertices[7 * 3] = {
-			-0.5f, -0.5f, 0.f, 0.2f, 0.6f, 0.9f, 1.0f,
-			 0.5f, -0.5f, 0.f, 0.8f, 0.7f, 0.2f, 1.0f,
-			 0.f,   0.5f, 0.f, 0.2f, 0.8f, 0.2f, 1.0f
-		};
-
-		m_VertexArray.reset(VertexArray::Create());
-		std::shared_ptr<VertexBuffer> vertexBuffer(VertexBuffer::Create(vertices, sizeof(vertices)));
-
-		uint32_t indices[3] = { 0,1,2 };
-		std::shared_ptr<IndexBuffer> indexBuffer(IndexBuffer::Create(indices, 3));
-		m_VertexArray->SetIndexBuffer(indexBuffer);
-
-		BufferLayout layout({
-			{ShaderDataType::Float3, "a_Position"},
-			{ShaderDataType::Float4, "a_Color"}
-			});
-		vertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(vertexBuffer);
-
-
-		std::string vertexSrc = R"(
-#version 330 core
-layout (location = 0) in vec3 a_Position;
-layout (location = 1) in vec4 a_Color;
-
-out vec3 v_Position;
-out vec4 v_Color;
-
-void main(){
-    gl_Position = vec4(a_Position, 1.0);
-    v_Position = a_Position;
-	v_Color = a_Color;
-}
-)";
-		std::string fragmentSrc = R"(
-#version 330 core
-in vec3 v_Position;
-in vec4 v_Color;
-out vec4 out_color;
-void main(){
-	out_color = v_Color;
-}
-)";
-
-		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
 
 	}
 	Application::~Application()	{
@@ -103,17 +58,9 @@ void main(){
 
 	void Application::Run() {
 
+		glEnable(GL_DEPTH_TEST);
+
 		while (m_Running) {
-
-			RenderCommand::Clear();
-			RenderCommand::ClearColor({ 0.25f, 0.65f, 0.35f, 1.0f });
-
-			Renderer::BeginScene();
-
-			m_Shader->Bind();
-			Renderer::Submit(m_VertexArray);
-
-			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
