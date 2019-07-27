@@ -74,42 +74,41 @@ void main(){
 	}
 	virtual ~ExampleLayer(){}
 
-	virtual void OnUpdate() override {
+	virtual void OnUpdate(Hazel::Timestep ts) override {
 
-
-		m_PrismRotation += 1.f;
+		m_PrismRotation +=60.f * ts;
 
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT)) {
-			m_CameraPosition.x -= m_CameraMoveSpeed;
+			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
 		}
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT)) {
-			m_CameraPosition.x += m_CameraMoveSpeed;
+			m_CameraPosition.x += m_CameraMoveSpeed * ts;
 		}
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN)) {
-			m_CameraPosition.z += m_CameraMoveSpeed;
+			m_CameraPosition.z += m_CameraMoveSpeed * ts;
 		}
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_UP)) {
-			m_CameraPosition.z -= m_CameraMoveSpeed;
+			m_CameraPosition.z -= m_CameraMoveSpeed * ts;
 		}
 
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_J)) {
-			m_PrismPosition.x -= m_ObjectSpeed;
+			m_PrismPosition.x -= m_ObjectSpeed * ts;
 		}
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_L)) {
-			m_PrismPosition.x += m_ObjectSpeed;
+			m_PrismPosition.x += m_ObjectSpeed * ts;
 		}
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_I)) {
-			m_PrismPosition.z -= m_ObjectSpeed;
+			m_PrismPosition.z -= m_ObjectSpeed * ts;
 		}
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_K)) {
-			m_PrismPosition.z += m_ObjectSpeed;
+			m_PrismPosition.z += m_ObjectSpeed * ts;
 		}
 
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_A)) {
-			m_CameraRotation -= m_CameraRotationSpeed;
+			m_CameraRotation -= m_CameraRotationSpeed * ts;
 		}
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_D)) {
-			m_CameraRotation += m_CameraRotationSpeed;
+			m_CameraRotation += m_CameraRotationSpeed * ts;
 		}
 
 
@@ -148,13 +147,12 @@ private:
 	glm::vec3 m_CameraPosition;
 	float m_CameraRotation = 0.f;
 
-	float m_CameraMoveSpeed = 0.1f;
-	float m_CameraRotationSpeed = 2.f;
+	float m_CameraMoveSpeed = 5.f;
+	float m_CameraRotationSpeed = 180.f;
 
 	glm::vec3 m_PrismPosition;
-	float m_ObjectSpeed = 0.1f;
+	float m_ObjectSpeed = 5.f;
 	float m_PrismRotation = 0.f;
-
 };
 
 
