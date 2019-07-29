@@ -41,7 +41,6 @@ namespace Hazel {
 		inline bool isCategory(EventCategory category) {
 			return GetCategoryFlags() & category;
 		}
-	protected:
 		bool m_Handled = false;
 	};
 
@@ -61,10 +60,12 @@ namespace Hazel {
 
 
 		template <typename T>
-		void Dispatch(EventFn<T&> func) {
+		bool Dispatch(EventFn<T&> func) {
 			if (T::GetStaticType() == m_Event.GetEventType()) {
-				func(*(T*)&m_Event);
+				m_Event.m_Handled = func(*(T*)&m_Event);
+				return true;
 			}
+			return false;
 		}
 
 	private:
