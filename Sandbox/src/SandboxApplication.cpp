@@ -1,4 +1,8 @@
 #include <Hazel.h>
+#include "Platform/OpenGL/OpenGLShader.h"
+
+#include <glm/gtc/type_ptr.hpp>
+
 #include <imgui\imgui.h>
 #include "hzpch.h"
 
@@ -63,13 +67,15 @@ void main(){
 #version 330 core
 in vec4 v_Color;
 
+uniform vec3 u_Brightness;
+
 out vec4 out_color;
 void main(){
-	out_color = v_Color;
+	out_color = v_Color * vec4(u_Brightness, 1.f);
 }
 )";
 
-		m_Shader.reset(new Hazel::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
 
 	}
 	virtual ~ExampleLayer(){}
@@ -121,6 +127,9 @@ void main(){
 		Hazel::RenderCommand::ClearColor({0.25f, 0.65f, 0.35f, 1.f});
 		Hazel::RenderCommand::Clear();
 
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->SetUniformFloat3("u_Brightness", m_Brightness);
+
 		glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
 		Hazel::Renderer::Submit(m_Shader, m_VertexArray, transform);
 		
@@ -129,7 +138,12 @@ void main(){
 	virtual void OnDetach() override {
 	}
 	virtual void OnAttach() override {}
-	virtual void OnImGuiRender() {}
+	virtual void OnImGuiRender() {
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Brightness", glm::value_ptr(m_Brightness));
+		ImGui::End();
+	}
+
 	virtual void OnEvent(Hazel::Event& event) override{
 		Hazel::EventDispatcher dispatcher = Hazel::EventDispatcher(event);
 		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnKeyPressedEvent));
@@ -153,6 +167,9 @@ private:
 	glm::vec3 m_PrismPosition;
 	float m_ObjectSpeed = 5.f;
 	float m_PrismRotation = 0.f;
+
+	glm::vec3 m_Brightness = {0.f, 0.f, 0.f};
+
 };
 
 
