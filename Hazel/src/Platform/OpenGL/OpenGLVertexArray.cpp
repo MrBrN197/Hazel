@@ -35,7 +35,7 @@ namespace Hazel {
 		glBindVertexArray(0);
 	};
 
-	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) {
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
 		
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
@@ -58,16 +58,16 @@ namespace Hazel {
 		m_VertexBuffers.push_back(vertexBuffer);
 
 	}
-	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) {
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 		m_IndexBuffer = indexBuffer;
 	}
 
-	const std::shared_ptr<IndexBuffer>& OpenGLVertexArray::GetIndexBuffer() const {
+	const Ref<IndexBuffer>& OpenGLVertexArray::GetIndexBuffer() const {
 		return m_IndexBuffer;
 	}
-	const std::vector<std::shared_ptr<VertexBuffer>>& OpenGLVertexArray::GetVertexBuffer() const {
+	const std::vector<Ref<VertexBuffer>>& OpenGLVertexArray::GetVertexBuffer() const {
 		return m_VertexBuffers;
 	}
 

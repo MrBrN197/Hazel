@@ -7,7 +7,7 @@ namespace Hazel {
 
 	class RenderCommand{
 	public:
-		static void RenderCommand::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) {
+		static void RenderCommand::DrawIndexed(const Ref<VertexArray>& vertexArray) {
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
 		static void RenderCommand::ClearColor(const glm::vec4& color) {

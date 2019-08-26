@@ -15,7 +15,7 @@ namespace Hazel {
 
 	Application::Application(){
 		s_Instance = this;
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Scope<Window>(Window::Create());
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
 		m_Window->SetCallbackFunc(BIND_EVENT_FN(OnEvent));

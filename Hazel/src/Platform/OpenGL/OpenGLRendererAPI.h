@@ -6,7 +6,7 @@ namespace Hazel{
 
 	class OpenGLRendererAPI : public RendererAPI {
 	public:
-		void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
+		void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 		void Clear() override;
 		void ClearColor(const glm::vec4& color) override;
 		void EnableDepthTesting() override;
