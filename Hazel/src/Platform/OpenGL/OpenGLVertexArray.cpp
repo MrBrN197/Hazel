@@ -43,17 +43,16 @@ namespace Hazel {
 		HZ_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBuffer has no layout");
 
 		const auto& layout = vertexBuffer->GetLayout();
-		uint32_t index = 0;
 		for (auto element : layout) {
-			glEnableVertexAttribArray(index);
+			glEnableVertexAttribArray(m_VertexBufferIndex);
 			glVertexAttribPointer(
-				index,
+				m_VertexBufferIndex,
 				BufferElement::GetComponentCount(element.Type),
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				(element.Normalized) ? GL_TRUE : GL_FALSE,
 				layout.GetStride(),
 				(const void*)element.Offset);
-			index++;
+			m_VertexBufferIndex++;
 		}
 		m_VertexBuffers.push_back(vertexBuffer);
 
