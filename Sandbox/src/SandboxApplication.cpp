@@ -168,7 +168,7 @@ private:
 	float m_ObjectSpeed = 5.f;
 	float m_PrismRotation = 0.f;
 
-	glm::vec3 m_Brightness = {0.f, 0.f, 0.f};
+	glm::vec3 m_Brightness = {1.f, 1.f, 1.f};
 
 };
 
