@@ -30,16 +30,13 @@ namespace Hazel {
 		return { (float)x, (float)y };
 	}
 	
-
 	float WindowsInput::GetMouseXImpl() {
-		
-		std::pair<float,float> xy = GetMousePositionImpl();
-		return std::get<0>(xy);
-
+		auto [x, y] = GetMousePositionImpl();
+		return x;
 	}
 	float WindowsInput::GetMouseYImpl() {
-		std::pair<float, float> xy = GetMousePositionImpl();
-		return std::get<1>(xy);
+		auto [x, y] = GetMousePositionImpl();
+		return y;
 	}
 
 }
