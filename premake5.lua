@@ -14,6 +14,7 @@ includeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 includeDir["Glad"] = "Hazel/vendor/Glad/include"
 includeDir["ImGui"] = "Hazel/vendor/imgui"
 includeDir["glm"] = "Hazel/vendor/glm"
+includeDir["stb_image"] = "Hazel/vendor/stb_image"
 
 include "Hazel/vendor/GLFW"
 include "Hazel/vendor/Glad"
@@ -23,7 +24,7 @@ project "Hazel"
 	location "Hazel"	
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++14"
+	cppdialect "C++17"
 	staticruntime "on"
 
 	pchheader "hzpch.h"
@@ -36,7 +37,9 @@ project "Hazel"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/**.hpp",
-		"%{prj.name}/vendor/glm/**.ini"
+		"%{prj.name}/vendor/glm/**.ini",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp"
 	}
 
 	includedirs{
@@ -45,7 +48,8 @@ project "Hazel"
 		"%{includeDir.GLFW}",
 		"%{includeDir.Glad}",
 		"%{includeDir.ImGui}",
-		"%{includeDir.glm}"
+		"%{includeDir.glm}",
+		"%{includeDir.stb_image}"
 	}
 
 	links{
@@ -86,7 +90,7 @@ project "Sandbox"
 	location "Sandbox"	
 	kind "consoleApp"
 	language "C++"
-	cppdialect "C++14"
+	cppdialect "C++17"
 	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
