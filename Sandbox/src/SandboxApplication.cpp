@@ -88,12 +88,12 @@ void main(){
 }
 )";
 
-		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
+		m_TextureShader.reset(Hazel::Shader::Create("assets/shaders/Texture.glsl"));
 
 		m_CheckerBoardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_CircleTexture = Hazel::Texture2D::Create("assets/textures/Circle.png");
-		//std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->SetUniformInt("u_Texture", 0);
+		//std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->SetUniformInt("u_Texture", 0);
 
 
 	}
@@ -143,14 +143,14 @@ void main(){
 		Hazel::RenderCommand::ClearColor({0.25f, 0.65f, 0.35f, 1.f});
 		Hazel::RenderCommand::Clear();
 
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->SetUniformFloat("u_Brightness", m_Brightness);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->SetUniformFloat("u_Brightness", m_Brightness);
 
 		glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
 		m_CheckerBoardTexture->Bind();
-		Hazel::Renderer::Submit(m_Shader, m_VertexArray, transform);
+		Hazel::Renderer::Submit(m_TextureShader, m_VertexArray, transform);
 		m_CircleTexture->Bind();
-		Hazel::Renderer::Submit(m_Shader, m_VertexArray, transform);
+		Hazel::Renderer::Submit(m_TextureShader, m_VertexArray, transform);
 		
 		Hazel::Renderer::EndScene();
 	}
@@ -174,7 +174,7 @@ void main(){
 private:
 	Hazel::PerspectiveCamera m_Camera;
 	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
-	Hazel::Ref<Hazel::Shader> m_Shader;
+	Hazel::Ref<Hazel::Shader> m_TextureShader;
 	Hazel::Ref<Hazel::Texture2D> m_CheckerBoardTexture;
 	Hazel::Ref<Hazel::Texture2D> m_CircleTexture;
 
