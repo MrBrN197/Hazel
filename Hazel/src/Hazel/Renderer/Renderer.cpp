@@ -8,6 +8,9 @@ namespace Hazel {
 
 	Renderer::SceneData Renderer::s_SceneData;
 
+	void Renderer::Init() {
+		RenderCommand::Init();
+	}
 	void Renderer::BeginScene(PerspectiveCamera camera) {
 		s_SceneData	= { camera.GetViewProjection() };
 	}

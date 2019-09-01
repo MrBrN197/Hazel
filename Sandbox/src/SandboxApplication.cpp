@@ -84,14 +84,14 @@ uniform float u_Brightness;
 uniform sampler2D u_Texture;
 
 void main(){
-	out_color = texture(u_Texture, v_TexCoord) * u_Brightness;
+	out_color = texture(u_Texture, v_TexCoord) * vec4(vec3(u_Brightness), 1.f);
 }
 )";
 
 		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
 
-		m_Texture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
-		m_Texture->Bind();
+		m_CheckerBoardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_CircleTexture = Hazel::Texture2D::Create("assets/textures/Circle.png");
 		//std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->SetUniformInt("u_Texture", 0);
 
@@ -136,9 +136,6 @@ void main(){
 			m_CameraRotation += m_CameraRotationSpeed * ts;
 		}
 
-
-		Hazel::RenderCommand::EnableDepthTesting();
-
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 		Hazel::Renderer::BeginScene(m_Camera);
@@ -150,12 +147,14 @@ void main(){
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->SetUniformFloat("u_Brightness", m_Brightness);
 
 		glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
+		m_CheckerBoardTexture->Bind();
+		Hazel::Renderer::Submit(m_Shader, m_VertexArray, transform);
+		m_CircleTexture->Bind();
 		Hazel::Renderer::Submit(m_Shader, m_VertexArray, transform);
 		
 		Hazel::Renderer::EndScene();
 	}
-	virtual void OnDetach() override {
-	}
+	virtual void OnDetach() override {}
 	virtual void OnAttach() override {}
 	virtual void OnImGuiRender() {
 		ImGui::Begin("Settings");
@@ -176,7 +175,8 @@ private:
 	Hazel::PerspectiveCamera m_Camera;
 	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
 	Hazel::Ref<Hazel::Shader> m_Shader;
-	Hazel::Ref<Hazel::Texture2D> m_Texture;
+	Hazel::Ref<Hazel::Texture2D> m_CheckerBoardTexture;
+	Hazel::Ref<Hazel::Texture2D> m_CircleTexture;
 
 	glm::vec3 m_CameraPosition;
 	float m_CameraRotation = 0.f;

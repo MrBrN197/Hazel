@@ -10,11 +10,10 @@ namespace Hazel {
 			None = 0, OpenGL
 		};
 	public:
+		virtual void Init() = 0;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
 		virtual void Clear() = 0;
 		virtual void ClearColor(const glm::vec4& color) = 0;
-		virtual void EnableDepthTesting() = 0;
-		virtual void DisableDepthTesting() = 0;
 
 		static inline API GetAPI() { return s_API; }
 	private:

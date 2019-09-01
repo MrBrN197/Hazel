@@ -7,6 +7,9 @@ namespace Hazel {
 
 	class RenderCommand{
 	public:
+		static void RenderCommand::Init() {
+			s_RendererAPI->Init();
+		}
 		static void RenderCommand::DrawIndexed(const Ref<VertexArray>& vertexArray) {
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
@@ -15,12 +18,6 @@ namespace Hazel {
 		}
 		static void RenderCommand::Clear() {
 			s_RendererAPI->Clear();
-		}
-		static void RenderCommand::EnableDepthTesting() {
-			s_RendererAPI->EnableDepthTesting();
-		}
-		static void RenderCommand::DisableDepthTesting() {
-			s_RendererAPI->DisableDepthTesting();
 		}
 
 		static RendererAPI* s_RendererAPI;

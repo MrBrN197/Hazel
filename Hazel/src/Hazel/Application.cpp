@@ -20,6 +20,8 @@ namespace Hazel {
 		PushOverlay(m_ImGuiLayer);
 		m_Window->SetCallbackFunc(BIND_EVENT_FN(OnEvent));
 
+		Renderer::Init();
+
 	}
 	Application::~Application()	{
 	}
