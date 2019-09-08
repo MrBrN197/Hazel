@@ -34,7 +34,7 @@ namespace Hazel {
 	std::string OpenGLShader::ReadFile(const std::string& path) {
 
 		std::string result;
-		std::ifstream in(path, std::ios::in, std::ios::binary);
+		std::ifstream in(path, std::ios::in | std::ios::binary);
 		if (in) {
 			in.seekg(0, std::ios::end);
 			result.resize(in.tellg());
@@ -70,9 +70,10 @@ namespace Hazel {
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources) {
 
 		uint32_t program = glCreateProgram();
-		std::vector<GLuint> glShaderIDs;
-		glShaderIDs.reserve(shaderSources.size());
+		std::array<GLenum, 2> glShaderIDs;
+		HZ_ASSERT(shaderSources.size() <= 2, "Only support 2 shaders");
 
+		uint32_t shaderCount = 0;
 		for (const auto kv : shaderSources) {
 
 			GLenum type = kv.first;
@@ -105,7 +106,7 @@ namespace Hazel {
 				// In this simple program, we'll just leave
 				return;
 			}
-			glShaderIDs.push_back(shader);
+			glShaderIDs[shaderCount++] = shader;
 		}
 
 		// Attach our shaders to our program
