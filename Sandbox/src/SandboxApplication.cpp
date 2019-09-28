@@ -87,13 +87,12 @@ void main(){
 	out_color = texture(u_Texture, v_TexCoord) * vec4(vec3(u_Brightness), 1.f);
 }
 )";
-
-		m_TextureShader.reset(Hazel::Shader::Create("assets/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load("TextureShader", "assets/shaders/Texture.glsl");
 
 		m_CheckerBoardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_CircleTexture = Hazel::Texture2D::Create("assets/textures/Circle.png");
-		//std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->SetUniformInt("u_Texture", 0);
+		Hazel::Ref<Hazel::OpenGLShader> textureShaderGL = std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader);
+		textureShaderGL->SetUniformInt("u_Texture", 0);
 
 
 	}
@@ -143,14 +142,15 @@ void main(){
 		Hazel::RenderCommand::ClearColor({0.25f, 0.65f, 0.35f, 1.f});
 		Hazel::RenderCommand::Clear();
 
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->SetUniformFloat("u_Brightness", m_Brightness);
+		auto textureShader = m_ShaderLibrary.Get("TextureShader");
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->SetUniformFloat("u_Brightness", m_Brightness);
 
 		glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
 		m_CheckerBoardTexture->Bind();
-		Hazel::Renderer::Submit(m_TextureShader, m_VertexArray, transform);
+		Hazel::Renderer::Submit(textureShader, m_VertexArray, transform);
 		m_CircleTexture->Bind();
-		Hazel::Renderer::Submit(m_TextureShader, m_VertexArray, transform);
+		Hazel::Renderer::Submit(textureShader, m_VertexArray, transform);
 		
 		Hazel::Renderer::EndScene();
 	}
@@ -174,7 +174,7 @@ void main(){
 private:
 	Hazel::PerspectiveCamera m_Camera;
 	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
-	Hazel::Ref<Hazel::Shader> m_TextureShader;
+	Hazel::ShaderLibrary m_ShaderLibrary;
 	Hazel::Ref<Hazel::Texture2D> m_CheckerBoardTexture;
 	Hazel::Ref<Hazel::Texture2D> m_CircleTexture;
 
