@@ -11,18 +11,19 @@ namespace Hazel {
 	public:
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& path);
+		virtual ~OpenGLShader();
+	private:
 		std::string ReadFile(const std::string& path);
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& path);
 		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
-		virtual ~OpenGLShader();
-
+		uint32_t GetUniformLocation(const char* name);
+	public:
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 		inline uint32_t GetRendererID() const { return  m_RendererID; }
 
 		virtual const std::string& GetName() const { return m_Name; }
-
-		uint32_t GetUniformLocation(const char* name);
+	public:
 		void SetUniformInt(const char* name, int value);
 
 		void SetUniformFloat(const char* name, float value);
