@@ -22,6 +22,13 @@ namespace Hazel {
 		std::string& source = ReadFile(path);
 		std::unordered_map<GLenum, std::string> shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		// Get shader name from filename
+		size_t lastSlash = path.find_last_of("\\/");
+		size_t period = path.rfind('.');
+		size_t begin = (lastSlash == std::string::npos) ? 0 : lastSlash + 1;
+		size_t span = (period == std::string::npos) ? path.size() - begin : period - begin;
+		m_Name = path.substr(begin, span);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : m_Name(name) {
