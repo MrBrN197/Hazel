@@ -10,13 +10,8 @@
 class ExampleLayer : public Hazel::Layer{
 public:
 	ExampleLayer()
-		: m_Camera(
-			60.f,
-			Hazel::Application::Get().GetWindow().GetWidth(),
-			Hazel::Application::Get().GetWindow().GetHeight(),
-			1.f,
-			6.f),
-		m_CameraPosition(0.f),
+		: m_CameraController(1280.f / 720.f, true), 
+		cameraPosition(0.f),
 		Hazel::Layer(), 
 		m_PrismPosition({0.f, 0.f, -2.f}) {
 
@@ -102,18 +97,7 @@ void main(){
 
 		m_PrismRotation += 60.f * ts;
 
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT)) {
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT)) {
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
-		}
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN)) {
-			m_CameraPosition.z += m_CameraMoveSpeed * ts;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_UP)) {
-			m_CameraPosition.z -= m_CameraMoveSpeed * ts;
-		}
+		m_CameraController.OnUpdate(ts);
 
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_J)) {
 			m_PrismPosition.x -= m_ObjectSpeed * ts;
@@ -128,16 +112,8 @@ void main(){
 			m_PrismPosition.z += m_ObjectSpeed * ts;
 		}
 
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_A)) {
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_D)) {
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		}
-
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-		Hazel::Renderer::BeginScene(m_Camera);
+		
+		Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
 		
 		Hazel::RenderCommand::ClearColor({0.25f, 0.65f, 0.35f, 1.f});
 		Hazel::RenderCommand::Clear();
@@ -146,7 +122,8 @@ void main(){
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->SetUniformFloat("u_Brightness", m_Brightness);
 
-		glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
+		//glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
+		glm::mat4 transform = glm::mat4(1.f);
 		m_CheckerBoardTexture->Bind();
 		Hazel::Renderer::Submit(textureShader, m_VertexArray, transform);
 		m_CircleTexture->Bind();
@@ -172,17 +149,17 @@ void main(){
 	}
 
 private:
-	Hazel::PerspectiveCamera m_Camera;
+	Hazel::OrthographicCameraController m_CameraController;
 	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
 	Hazel::ShaderLibrary m_ShaderLibrary;
 	Hazel::Ref<Hazel::Texture2D> m_CheckerBoardTexture;
 	Hazel::Ref<Hazel::Texture2D> m_CircleTexture;
 
-	glm::vec3 m_CameraPosition;
-	float m_CameraRotation = 0.f;
+	glm::vec3 cameraPosition;
+	float cameraRotation = 0.f;
 
-	float m_CameraMoveSpeed = 5.f;
-	float m_CameraRotationSpeed = 180.f;
+	float cameraMoveSpeed = 5.f;
+	float cameraRotationSpeed = 180.f;
 
 	glm::vec3 m_PrismPosition;
 	float m_ObjectSpeed = 5.f;

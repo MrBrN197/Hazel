@@ -14,6 +14,9 @@ namespace Hazel {
 	void Renderer::BeginScene(PerspectiveCamera camera) {
 		s_SceneData	= { camera.GetViewProjection() };
 	}
+	void Renderer::BeginScene(OrthographicCamera camera) {
+		s_SceneData = { camera.GetViewProjection() };
+	}
 	void Renderer::EndScene() {}
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) {
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(shader)->Bind();
