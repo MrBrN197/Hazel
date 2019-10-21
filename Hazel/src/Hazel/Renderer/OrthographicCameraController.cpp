@@ -10,7 +10,6 @@ Hazel::OrthographicCameraController::OrthographicCameraController(float aspectRa
 
 void Hazel::OrthographicCameraController::OnUpdate(Timestep ts)
 {
-	HZ_CORE_INFO("Rotation: {0}", m_CameraRotation);
 	if (Input::IsKeyPressed(HZ_KEY_A)) {
 		m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
 		m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
@@ -53,7 +52,8 @@ void Hazel::OrthographicCameraController::OnUpdate(Timestep ts)
 void Hazel::OrthographicCameraController::OnEvent(Event& e)
 {
 	EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<MouseScrollEvent>(std::bind(&OrthographicCameraController::OnMouseScroll, this, std::placeholders::_1));
+	dispatcher.Dispatch<MouseScrollEvent>(HZ_BIND_EVENT_FN(OrthographicCameraController::OnMouseScroll));
+	dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(OrthographicCameraController::OnWindowResize));
 }
 
 bool Hazel::OrthographicCameraController::OnMouseScroll(MouseScrollEvent& e)
@@ -61,6 +61,7 @@ bool Hazel::OrthographicCameraController::OnMouseScroll(MouseScrollEvent& e)
 	m_ZoomLevel -= e.GetYOffset() * 0.25f;
 	m_ZoomLevel = std::max(0.25f, m_ZoomLevel);
 	m_Camera.SetProjection(-m_ZoomLevel * m_AspectRatio, m_ZoomLevel * m_AspectRatio, -m_ZoomLevel, m_ZoomLevel);
+	m_CameraMoveSpeed = m_ZoomLevel;
 	return false;
 }
 

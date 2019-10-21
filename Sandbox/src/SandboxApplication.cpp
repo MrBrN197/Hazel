@@ -139,9 +139,11 @@ void main(){
 		ImGui::End();
 	}
 
-	virtual void OnEvent(Hazel::Event& event) override{
-		Hazel::EventDispatcher dispatcher = Hazel::EventDispatcher(event);
+	virtual void OnEvent(Hazel::Event& e) override{
+		Hazel::EventDispatcher dispatcher = Hazel::EventDispatcher(e);
 		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnKeyPressedEvent));
+
+		m_CameraController.OnEvent(e);
 	}
 
 	bool OnKeyPressedEvent(Hazel::KeyPressedEvent& event) {
