@@ -10,6 +10,9 @@ namespace Hazel {
 		static void RenderCommand::Init() {
 			s_RendererAPI->Init();
 		}
+		static void RenderCommand::SetViewportSize(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+			s_RendererAPI->SetViewportSize(0, 0, width, height);
+		}
 		static void RenderCommand::DrawIndexed(const Ref<VertexArray>& vertexArray) {
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}

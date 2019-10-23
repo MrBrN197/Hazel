@@ -11,6 +11,7 @@ namespace Hazel {
 		};
 	public:
 		virtual void Init() = 0;
+		virtual void SetViewportSize(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
 		virtual void Clear() = 0;
 		virtual void ClearColor(const glm::vec4& color) = 0;
