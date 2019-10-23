@@ -1,8 +1,12 @@
-#Directories
-.vs/
-.vscode/
-bin/
+# Binaries
+**/bin/
+!vendor/bin/premake/
 bin-int/
 
-#Files
-*.user
+# Visual Studio Files And Folders
+.vs/
+.vscode/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user 
