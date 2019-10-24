@@ -19,7 +19,7 @@ namespace Hazel {
 		struct SceneData {
 			glm::mat4 viewProjection;
 		};
-		static SceneData s_SceneData;
+		static Scope<SceneData> s_SceneData;
 	};
 
 

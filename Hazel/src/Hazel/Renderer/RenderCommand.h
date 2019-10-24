@@ -23,7 +23,7 @@ namespace Hazel {
 			s_RendererAPI->Clear();
 		}
 
-		static RendererAPI* s_RendererAPI;
+		static Scope<RendererAPI> s_RendererAPI;
 	};
 
 }

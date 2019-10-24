@@ -30,7 +30,7 @@ public:
 		};
 
 		m_VertexArray.reset(Hazel::VertexArray::Create());
-		std::shared_ptr<Hazel::VertexBuffer> vertexBuffer(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+		Hazel::Ref<Hazel::VertexBuffer> vertexBuffer(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		//uint32_t indices[3 * 4] = {
 		//	0, 1, 2,
@@ -42,7 +42,7 @@ public:
 			0, 1, 2,
 			0, 2, 3
 		};
-		std::shared_ptr<Hazel::IndexBuffer> indexBuffer(Hazel::IndexBuffer::Create(indices, 3 * 4));
+		Hazel::Ref<Hazel::IndexBuffer> indexBuffer(Hazel::IndexBuffer::Create(indices, 3 * 4));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		Hazel::BufferLayout layout({
