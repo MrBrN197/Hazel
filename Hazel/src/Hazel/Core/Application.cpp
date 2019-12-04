@@ -1,11 +1,11 @@
 #include "hzpch.h"
 #include "Application.h"
-#include "Platform/Windows/WindowsWindow.h"
-#include "Hazel/Renderer/Buffer.h"
-#include "Hazel/Renderer/RenderCommand.h"
-#include "Hazel/Renderer/Renderer.h"
-#include "Hazel/Renderer/PerspectiveCamera.h"
-#include "Hazel/Input.h"
+#include "Platform\Windows\WindowsWindow.h"
+#include "Hazel\Renderer\Buffer.h"
+#include "Hazel\Renderer\RenderCommand.h"
+#include "Hazel\Renderer\Renderer.h"
+#include "Hazel\Renderer\PerspectiveCamera.h"
+#include "Hazel\Core\Input.h"
 
 namespace Hazel {
 

@@ -1,4 +1,4 @@
-#include "Hazel\Input.h"
+#include "Hazel\Core\Input.h"
 
 namespace Hazel {
 	class HAZEL_API WindowsInput : public Input{

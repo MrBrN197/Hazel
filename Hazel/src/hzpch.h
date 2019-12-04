@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "Hazel/Log.h"
+#include "Hazel/Core/Log.h"
 
 #include <string>
 #include <sstream>
