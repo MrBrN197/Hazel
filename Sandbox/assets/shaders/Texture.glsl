@@ -20,9 +20,11 @@ layout(location = 0) out vec4 out_color;
 
 in vec2 v_TexCoord;
 
-uniform float u_Brightness;
+uniform vec4 u_Color;
 uniform sampler2D u_Texture;
 
 void main(){
-	out_color = texture(u_Texture, v_TexCoord) * vec4(vec3(u_Brightness), 1.f);
+	vec4 textureColor = texture(u_Texture, v_TexCoord);
+	out_color = (textureColor * textureColor.a) + u_Color * (1 - textureColor.a);
+	out_color.a = u_Color.a + textureColor.a;
 }

@@ -86,8 +86,8 @@ void main(){
 
 		m_CheckerBoardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_CircleTexture = Hazel::Texture2D::Create("assets/textures/Circle.png");
-		Hazel::Ref<Hazel::OpenGLShader> textureShaderGL = std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader);
-		textureShaderGL->SetUniformInt("u_Texture", 0);
+		//Hazel::Ref<Hazel::OpenGLShader> textureShaderGL = std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader);
+		textureShader->SetInt("u_Texture", 0);
 
 
 	}
@@ -119,13 +119,13 @@ void main(){
 		Hazel::RenderCommand::Clear();
 
 		auto textureShader = m_ShaderLibrary.Get("TextureShader");
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->SetUniformFloat("u_Brightness", m_Brightness);
+		textureShader->Bind();
+		textureShader->SetFloat4("u_Color", m_Color);
 
 		//glm::mat4 transform = glm::translate(m_PrismPosition) * glm::rotate(glm::radians(m_PrismRotation), glm::vec3(0.0f, 1.f, 0.f));
 		glm::mat4 transform = glm::mat4(1.f);
-		m_CheckerBoardTexture->Bind();
-		Hazel::Renderer::Submit(textureShader, m_VertexArray, transform);
+		//m_CheckerBoardTexture->Bind();
+		//Hazel::Renderer::Submit(textureShader, m_VertexArray, transform);
 		m_CircleTexture->Bind();
 		Hazel::Renderer::Submit(textureShader, m_VertexArray, transform);
 		
@@ -135,7 +135,7 @@ void main(){
 	virtual void OnAttach() override {}
 	virtual void OnImGuiRender() {
 		ImGui::Begin("Settings");
-		ImGui::SliderFloat("Brightness", &m_Brightness, 0.f, 1.f);
+		ImGui::SliderFloat4("Brightness", glm::value_ptr(m_Color), 0.f, 1.f);
 		ImGui::End();
 	}
 
@@ -167,7 +167,7 @@ private:
 	float m_ObjectSpeed = 5.f;
 	float m_PrismRotation = 0.f;
 
-	float m_Brightness = 1.f;
+	glm::vec4 m_Color = { 1.f, 1.f, 1.f, 1.f};
 
 };
 
