@@ -1,11 +1,12 @@
 #include <Hazel.h>
-#include "Platform/OpenGL/OpenGLShader.h"
+#include <Hazel\Core\EntryPoint.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
 #include <imgui\imgui.h>
 #include "hzpch.h"
 
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Hazel::Layer{
 public:
@@ -29,7 +30,7 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		m_VertexArray.reset(Hazel::VertexArray::Create());
+		m_VertexArray = Hazel::VertexArray::Create();
 		Hazel::Ref<Hazel::VertexBuffer> vertexBuffer(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		//uint32_t indices[3 * 4] = {
@@ -177,7 +178,8 @@ class Sandbox : public Hazel::Application {
 public:
 	Sandbox() : Hazel::Application() {
 
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 	~Sandbox(){}
 };
