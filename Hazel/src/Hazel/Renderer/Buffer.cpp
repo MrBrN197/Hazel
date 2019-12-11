@@ -10,7 +10,7 @@ namespace Hazel {
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::API::None: HZ_CORE_ASSERT(false, " RendererAPI::None is currently not supported"); return nullptr;
-			case RendererAPI::API::OpenGL: return std::make_unique<OpenGLVertexBuffer>(vertices, size);
+			case RendererAPI::API::OpenGL: return CreateScope<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		HZ_CORE_ASSERT(false, " RenderAPI not recognized");
@@ -21,7 +21,7 @@ namespace Hazel {
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::API::None: HZ_CORE_ASSERT(false, " No implementation for None API"); return nullptr;
-			case RendererAPI::API::OpenGL: return std::make_unique<OpenGLIndexBuffer>(indices, count);
+			case RendererAPI::API::OpenGL: return CreateScope<OpenGLIndexBuffer>(indices, count);
 		}
 
 		HZ_CORE_ASSERT(false, " RenderAPI not recognized");
