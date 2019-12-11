@@ -12,8 +12,8 @@ namespace Hazel {
 
 	struct Renderer2DStorage {
 		Ref<VertexArray> QuadVertexArray;
-		Ref<Shader> FlatColorShader;
 		Ref<Shader> TextureShader;
+		Ref<Texture2D> WhiteTexture;
 	};
 
 	static Renderer2DStorage *s_Data;
@@ -22,7 +22,10 @@ namespace Hazel {
 		s_Data = new Renderer2DStorage;
 		s_Data->QuadVertexArray = VertexArray::Create();
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		s_Data->FlatColorShader = Shader::Create("assets/shaders/FlatColor.glsl");
+		s_Data->WhiteTexture = Texture2D::Create(1, 1);
+		s_Data->WhiteTexture->Bind();
+		uint32_t data = 0xffffffff;
+		s_Data->WhiteTexture->SetData(&data, sizeof(uint32_t));
 
 		float vertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -55,8 +58,6 @@ namespace Hazel {
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera) {
-		s_Data->FlatColorShader->Bind();
-		s_Data->FlatColorShader->SetMat4("u_ViewProjection", camera.GetViewProjection());
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjection());
 	}
@@ -68,11 +69,12 @@ namespace Hazel {
 		DrawQuad({pos.x, pos.y, 0.f }, size, color);
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
-		s_Data->FlatColorShader->Bind();
-		s_Data->FlatColorShader->SetFloat4("u_Color", color);
+		s_Data->WhiteTexture->Bind();
+		s_Data->TextureShader->Bind();
+		s_Data->TextureShader->SetFloat4("u_Color", color);
 
 		glm::mat4 transform = glm::translate(pos) * glm::scale(glm::vec3{size.x, size.y, 1.f});
-		s_Data->FlatColorShader->SetMat4("u_Transform", transform);
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
@@ -83,6 +85,7 @@ namespace Hazel {
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture>& texture) {
 		s_Data->TextureShader->Bind();
+		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4{ 1.f });
 		texture->Bind();
 
 		glm::mat4 transform = glm::translate(pos) * glm::scale(glm::vec3{ size.x, size.y, 1.f });
