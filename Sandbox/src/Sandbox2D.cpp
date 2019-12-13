@@ -40,7 +40,7 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts) {
 		Hazel::Renderer2D::EndScene();
 	}
 
-
+	
 };
 void Sandbox2D::OnImGuiRender() {
 	HZ_PROFILE_FUNCTION();

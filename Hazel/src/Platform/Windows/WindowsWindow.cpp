@@ -20,26 +20,35 @@ namespace Hazel {
 	}
 
 	WindowsWindow::~WindowsWindow() {
+		HZ_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 	WindowsWindow::WindowsWindow(WindowProps& props) {
+		HZ_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	void WindowsWindow::Init(WindowProps& props) {
+		HZ_PROFILE_FUNCTION();
+
 		m_Data.Title = props.Title;
 		m_Data.Height = props.Height;
 		m_Data.Width = props.Width;
 		m_Data.Vsync = props.Vsync;
 
 		if (!s_GlfwInitialized) {
+			HZ_PROFILE_SCOPE("glfwInit");
 			int success = glfwInit();
 			HZ_CORE_ASSERT(success, "Failed To Initialize GLFW");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GlfwInitialized = true;
 		}
-
-		m_Window = glfwCreateWindow(props.Width, props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		{
+			HZ_PROFILE_SCOPE("glfwCreateWindow");
+			m_Window = glfwCreateWindow(props.Width, props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		}
 
 		m_Context = CreateScope<OpenGLContext>(m_Window);
 		m_Context->Init();
@@ -122,15 +131,18 @@ namespace Hazel {
 
 	}
 	void WindowsWindow::Shutdown() {
+		HZ_PROFILE_FUNCTION();
 		glfwDestroyWindow(m_Window);
 	}
 
 	void WindowsWindow::OnUpdate(){
+		HZ_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVsync(bool enabled) {
+		HZ_PROFILE_FUNCTION();
 		if (enabled) {
 			glfwSwapInterval(1);
 		}

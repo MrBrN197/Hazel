@@ -14,6 +14,7 @@ namespace Hazel {
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application(){
+		HZ_PROFILE_FUNCTION();
 		s_Instance = this;
 		m_Window = Scope<Window>(Window::Create());
 		m_ImGuiLayer = new ImGuiLayer;
@@ -24,23 +25,30 @@ namespace Hazel {
 
 	}
 	Application::~Application()	{
+		HZ_PROFILE_FUNCTION();
 	}
 
 	void Application::PushLayer(Layer* layer) {
+		HZ_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 	void Application::PushOverlay(Layer* layer) {
+		HZ_PROFILE_FUNCTION();
 		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 	void Application::PopLayer(Layer* layer){
+		HZ_PROFILE_FUNCTION();
 		m_LayerStack.PopLayer(layer);
 	}
 	void Application::PopOverlay(Layer* layer) {
+		HZ_PROFILE_FUNCTION();
 		m_LayerStack.PopOverlay(layer);
 	}
 
 	void Application::OnEvent(Event& e) {
-
+		HZ_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
@@ -53,20 +61,24 @@ namespace Hazel {
 	}
 
 	void Application::Run() {
-
+		HZ_PROFILE_FUNCTION();
 		while (m_Running) {
-
+			HZ_PROFILE_SCOPE("Main Loop");
 			float time = (float)glfwGetTime();
 			Timestep ts = time - m_LastFrameTime;
 			m_LastFrameTime = time;
-
-			for (Layer* layer : m_LayerStack) {
-				layer->OnUpdate(ts);
+			{
+				HZ_PROFILE_SCOPE("LayerStack OnUpdate");
+				for (Layer* layer : m_LayerStack) {
+					layer->OnUpdate(ts);
+				}
 			}
-
 			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
+			{
+				HZ_PROFILE_SCOPE("LayerStack OnImGuiRender");
+				for (Layer* layer : m_LayerStack)
+					layer->OnImGuiRender();
+			}
 			m_ImGuiLayer->End();
 
 
@@ -75,11 +87,13 @@ namespace Hazel {
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e) {
+		HZ_PROFILE_FUNCTION();
 		m_Running = false;
 		return true;
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e) {
+		HZ_PROFILE_FUNCTION();
 		if (e.GetHeight() == 0 || e.GetWidth() == 0) {
 			m_Minimized = false;
 			return false;

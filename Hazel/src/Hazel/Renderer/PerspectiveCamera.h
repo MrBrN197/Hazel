@@ -12,6 +12,8 @@ namespace Hazel {
 	class PerspectiveCamera {
 	public:
 		PerspectiveCamera(float fov, float width, float height, float nearClip, float farClip) {
+			HZ_PROFILE_FUNCTION();
+
 			m_ProjectionMatrix = glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip);
 		}
 
@@ -25,9 +27,13 @@ namespace Hazel {
 		}
 
 		const glm::mat4 GetViewProjection() const {
+			HZ_PROFILE_FUNCTION();
+
 			return m_ProjectionMatrix * m_ViewMatrix;
 		}
 		void RecalculateViewMatrix() {
+			HZ_PROFILE_FUNCTION();
+
 			glm::mat4 transform = glm::translate(m_Translation) * glm::rotate(glm::radians(m_Rotation), glm::vec3(0.f, 1.f, 0.f));
 			//glm::mat4 rotate = glm::rotate(glm::radians(-m_Rotation), glm::vec3(0.f, 1.f, 0.f));
 			m_ViewMatrix = glm::inverse(transform);
