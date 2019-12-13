@@ -12,6 +12,8 @@
 
 #include "Hazel/Core/Log.h"
 
+#include "Hazel/Debug/Insturmentor.h"
+
 #include <string>
 #include <sstream>
 #include <vector>
