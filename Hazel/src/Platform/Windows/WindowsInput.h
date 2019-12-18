@@ -10,5 +10,7 @@ namespace Hazel {
 		virtual float GetMouseXImpl() override;
 		virtual float GetMouseYImpl() override;
 
+		virtual void SetMouseXImpl(float x) override;
+
 	};
 }

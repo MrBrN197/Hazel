@@ -20,9 +20,10 @@ namespace Hazel {
 		inline unsigned int GetHeight() const override { return m_Data.Height; }
 
 		//WindowAttributes
-		void SetVsync(bool enabled) override;
-		inline bool IsVsync() const override { return m_Data.Vsync; }
-		inline void SetCallbackFunc(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+		virtual void ToggleCursorVisibility() override;
+		virtual void SetVsync(bool enabled) override;
+		inline virtual bool IsVsync() const override { return m_Data.Vsync; }
+		inline virtual void SetCallbackFunc(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 
 		virtual void* GetNativeWindow() override;
 
@@ -34,6 +35,7 @@ namespace Hazel {
 			unsigned int Width, Height;
 			std::string Title;
 			bool Vsync;
+			bool CursorVisible = true;
 			EventCallbackFn EventCallback;
 		};
 

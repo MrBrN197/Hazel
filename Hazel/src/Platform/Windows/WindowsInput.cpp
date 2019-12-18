@@ -39,4 +39,8 @@ namespace Hazel {
 		return y;
 	}
 
+	void WindowsInput::SetMouseXImpl(float x) {
+		glfwSetCursorPos((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow(), x, GetMouseYImpl());
+	}
+
 }

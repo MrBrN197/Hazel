@@ -17,6 +17,10 @@ namespace Hazel {
 			m_ProjectionMatrix = glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip);
 		}
 
+		void SetProjection(float fov, float width, float height, float nearClip, float farClip) {
+			m_ProjectionMatrix = glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip);
+		}
+
 		void SetPosition(const glm::vec3& translate) {
 			m_Translation = translate;
 			RecalculateViewMatrix();
@@ -24,6 +28,9 @@ namespace Hazel {
 		void SetRotation(float rotate) {
 			m_Rotation = rotate;
 			RecalculateViewMatrix();
+		}
+		void SetFov(float fov) {
+			SetProjection(fov, 1.778f, 1.f, 1.f, 100.f);
 		}
 
 		const glm::mat4 GetViewProjection() const {
@@ -35,7 +42,6 @@ namespace Hazel {
 			HZ_PROFILE_FUNCTION();
 
 			glm::mat4 transform = glm::translate(m_Translation) * glm::rotate(glm::radians(m_Rotation), glm::vec3(0.f, 1.f, 0.f));
-			//glm::mat4 rotate = glm::rotate(glm::radians(-m_Rotation), glm::vec3(0.f, 1.f, 0.f));
 			m_ViewMatrix = glm::inverse(transform);
 		}
 	private:

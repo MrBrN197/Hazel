@@ -23,7 +23,8 @@ namespace Hazel {
 		inline virtual unsigned int GetWidth() const = 0;
 		inline virtual unsigned int GetHeight() const = 0;
 
-		//WindowAttributes
+		// WindowAttributes
+		virtual void ToggleCursorVisibility() = 0;
 		virtual void SetVsync(bool enabled) = 0;
 		inline virtual bool IsVsync() const = 0;
 		inline virtual void SetCallbackFunc(const EventCallbackFn& callback) = 0;

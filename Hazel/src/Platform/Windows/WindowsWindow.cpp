@@ -152,6 +152,16 @@ namespace Hazel {
 		m_Data.Vsync = enabled;
 	}
 
+	void WindowsWindow::ToggleCursorVisibility() {
+		if (m_Data.CursorVisible) {
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		else {
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+		m_Data.CursorVisible = !m_Data.CursorVisible;
+	}
+
 	void* WindowsWindow::GetNativeWindow() {
 		return m_Window;
 	}
