@@ -14,6 +14,7 @@ namespace Hazel {
 
 		static void DrawCube(glm::vec3 position, glm::vec4 color);
 		static void DrawFloor();
+		static void DrawCubeMesh(glm::vec3 position, glm::vec4 color);
 	};
 
 }

@@ -20,8 +20,9 @@ void Sandbox3D::OnUpdate(Hazel::Timestep ts) {
 
 	Hazel::Renderer3D::BeginScene(m_CameraController.GetCamera());
 	Hazel::Renderer3D::DrawFloor();
-	Hazel::Renderer3D::DrawCube(m_Position, m_Color);
-	Hazel::Renderer3D::DrawCube({1.f, 0.f, 0.f}, {0.2f, 0.3f, 0.8f, 1.f});
+	//Hazel::Renderer3D::DrawCube(m_Position, m_Color);
+	//Hazel::Renderer3D::DrawCube({ 1.f, 0.f, 0.f }, { 0.2f, 0.3f, 0.8f, 1.f });
+	Hazel::Renderer3D::DrawCubeMesh({1.f, 0.f, 0.f}, {0.2f, 0.3f, 0.8f, 1.f});
 	Hazel::Renderer3D::EndScene();
 
 }

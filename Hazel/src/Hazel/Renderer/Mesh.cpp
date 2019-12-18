@@ -33,7 +33,7 @@ namespace Hazel {
 			HZ_CORE_ASSERT(face.mNumIndices== 3, "More Than Three Indices in '{0}' Mesh", path);
 			
 			for (int j = 0; j < 3; j++) {
-				m_Indices.emplace_back(face.mIndices[i]);
+				m_Indices.emplace_back(face.mIndices[j]);
 			}
 		}
 	}
