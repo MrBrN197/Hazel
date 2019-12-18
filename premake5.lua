@@ -19,6 +19,7 @@ includeDir["Glad"] = "Hazel/vendor/Glad/include"
 includeDir["ImGui"] = "Hazel/vendor/imgui"
 includeDir["glm"] = "Hazel/vendor/glm"
 includeDir["stb_image"] = "Hazel/vendor/stb_image"
+includeDir["assimp"] = "Hazel/vendor/assimp/include"
 
 include "Hazel/vendor/GLFW"
 include "Hazel/vendor/Glad"
@@ -53,14 +54,19 @@ project "Hazel"
 		"%{includeDir.Glad}",
 		"%{includeDir.ImGui}",
 		"%{includeDir.glm}",
-		"%{includeDir.stb_image}"
+		"%{includeDir.stb_image}",
+		"%{includeDir.assimp}"
+	}
+	libdirs{
+		"Hazel/vendor/assimp/lib"
 	}
 
 	links{
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"assimp-vc140-mt.lib"
 	}
 
 	defines{
