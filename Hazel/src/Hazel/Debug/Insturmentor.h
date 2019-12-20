@@ -127,10 +127,6 @@ namespace Hazel{
 
 			uint32_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
 			Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID });
-			std::string search = m_Name;
-			if (search.find("SLEEP") != std::string::npos) {
-				std::cout << "Name: " << m_Name << " Time: " << end - start << std::endl;
-			}
 			m_Stopped = true;
 		}
 	private:

@@ -73,7 +73,7 @@ namespace Hazel {
 	const Ref<IndexBuffer>& OpenGLVertexArray::GetIndexBuffer() const {
 		return m_IndexBuffer;
 	}
-	const std::vector<Ref<VertexBuffer>>& OpenGLVertexArray::GetVertexBuffer() const {
+	const std::vector<Ref<VertexBuffer>>& OpenGLVertexArray::GetVertexBuffers() const {
 		return m_VertexBuffers;
 	}
 

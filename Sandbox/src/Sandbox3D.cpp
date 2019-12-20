@@ -6,9 +6,23 @@
 Sandbox3D::Sandbox3D() : m_CameraController(45.f, 1.778f) {}
 
 void Sandbox3D::OnAttach() {
+	HZ_PROFILE_FUNCTION();
+	std::ifstream file("assets/models/load.txt", std::ios::in);
+	HZ_CORE_ASSERT(file, "Failed To Load assets/models/load.txt");
+
+	std::string path;
+	while (file.good()) {
+		getline(file, path);
+		Hazel::Mesh mesh(path);
+		Hazel::Renderer3D::Submit(mesh);
+		HZ_CORE_INFO("Loading: {0}", path);
+	}
+	file.close();
+
 	HZ_INFO("Sandbox3D Attached");
 }
 void Sandbox3D::OnDetach() {
+	HZ_PROFILE_FUNCTION();
 	HZ_INFO("Sandbox3D Detached");
 }
 void Sandbox3D::OnUpdate(Hazel::Timestep ts) {
@@ -22,7 +36,7 @@ void Sandbox3D::OnUpdate(Hazel::Timestep ts) {
 	Hazel::Renderer3D::DrawFloor();
 	//Hazel::Renderer3D::DrawCube(m_Position, m_Color);
 	//Hazel::Renderer3D::DrawCube({ 1.f, 0.f, 0.f }, { 0.2f, 0.3f, 0.8f, 1.f });
-	Hazel::Renderer3D::DrawCubeMesh({1.f, 0.f, 0.f}, {0.2f, 0.3f, 0.8f, 1.f});
+	Hazel::Renderer3D::Flush();
 	Hazel::Renderer3D::EndScene();
 
 }
@@ -35,8 +49,6 @@ void Sandbox3D::OnEvent(Hazel::Event& e) {
 
 bool Sandbox3D::OnMouseMoved(Hazel::MouseMovedEvent& e) {
 	uint32_t width = Hazel::Application::Get().GetWindow().GetWidth();
-	if (e.GetX() > width) {
-	}
 	return false;
 }
 

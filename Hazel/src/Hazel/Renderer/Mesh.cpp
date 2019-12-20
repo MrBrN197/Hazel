@@ -9,8 +9,9 @@
 namespace Hazel {
 	
 	Mesh::Mesh(const std::string& path) {
+		HZ_PROFILE_FUNCTION();
 		Assimp::Importer Importer;
-		const aiScene* scene = Importer.ReadFile(path.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals| aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+		const aiScene* scene = Importer.ReadFile(path.c_str(), aiProcess_Triangulate|aiProcess_GenSmoothNormals|aiProcess_FlipUVs|aiProcess_JoinIdenticalVertices);
 		
 		HZ_CORE_ASSERT(scene, "Failed To Load Model @ '{0}'", path);
 	
@@ -21,8 +22,7 @@ namespace Hazel {
 		for (uint32_t i = 0; i < currentMesh->mNumVertices; i++) {
 			aiVector3D vertex = currentMesh->mVertices[i];
 			aiVector3D normal = currentMesh->mNormals[i];
-			HZ_CORE_ASSERT(currentMesh->HasTextureCoords(0), "'{0}' doesn't have Texture Coordinates", path);
-			aiVector3D texCoord = currentMesh->mTextureCoords[0][i];
+			aiVector3D texCoord = currentMesh->HasTextureCoords(0) ? currentMesh->mTextureCoords[0][i] : aiVector3D{0.f, 0.f, 0.f};
 
 			m_Vertices.emplace_back(vertex.x, vertex.y, vertex.z);
 			m_Normals.emplace_back(normal.x, normal.y, normal.z);

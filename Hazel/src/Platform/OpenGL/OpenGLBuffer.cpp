@@ -33,6 +33,12 @@ namespace Hazel {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	void* OpenGLVertexBuffer::MapBuffer() const {
+		return glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	}
+	void OpenGLVertexBuffer::UnmapBuffer() const {
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+	}
 
 	////////////////////////////////////////////////////////////////////
 	///// IndexBuffer //////////////////////////////////////////////////
@@ -60,6 +66,13 @@ namespace Hazel {
 		HZ_PROFILE_FUNCTION();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	void* OpenGLIndexBuffer::MapBuffer() const {
+		return glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
+	}
+	void OpenGLIndexBuffer::UnmapBuffer() const {
+		glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 	}
 
 }

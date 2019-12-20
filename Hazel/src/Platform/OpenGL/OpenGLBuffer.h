@@ -16,6 +16,10 @@ namespace Hazel {
 			m_Layout = layout;
 		}
 
+		virtual void* MapBuffer() const override;
+		virtual void UnmapBuffer() const override;
+
+
 	private:
 		BufferLayout m_Layout;
 		uint32_t m_RendererID;
@@ -26,9 +30,14 @@ namespace Hazel {
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
 		virtual ~OpenGLIndexBuffer();
 
-		virtual void Bind() const;
-		virtual void Unbind() const;
-		inline uint32_t GetCount() const { return m_Count; }
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+		virtual inline uint32_t GetCount() const override { return m_Count; }
+		virtual inline void SetCount(uint32_t count) override { m_Count = count;}
+
+		virtual void* MapBuffer() const override;
+		virtual void UnmapBuffer() const override;
+
 	private:
 		uint32_t m_RendererID;
 		uint32_t m_Count;
